@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>daffa kopi</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo">KOPI Indonesia<br><span style="font-size: 14px; font-weight: normal; color: #fff;">Creative Analytics</span></div>
+            <nav>
+                <a href="#" class="nav-btn active" data-target="overview-tab">📊 Overview & Provinsi</a>
+                <a href="#" class="nav-btn" data-target="trend-tab">📈 Tren Tahunan</a>
+                <a href="#" class="nav-btn" data-target="table-tab">📄 Data Spreadsheet</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="main-header">
+                <div>
+                    <h1>Produksi Kopi Nasional</h1>
+                    <p>Dashboard Interaktif Perkebunan Indonesia</p>
+                </div>
+                <div class="filter-container" style="display: flex; gap: 10px;">
+                    <select id="month-filter" onchange="updateDashboardData()" style="padding: 8px; border-radius: 5px; background: #2c3e50; color: white; border: 1px solid #34495e; cursor: pointer; outline: none;">
+                        <option value="">🗓️ Semua Bulan</option>
+                        <option value="Januari">🗓️ Januari</option>
+                        <option value="Februari">🗓️ Februari</option>
+                        <option value="Maret">🗓️ Maret</option>
+                        <option value="April">🗓️ April</option>
+                        <option value="Mei">🗓️ Mei</option>
+                        <option value="Juni">🗓️ Juni</option>
+                        <option value="Juli">🗓️ Juli</option>
+                        <option value="Agustus">🗓️ Agustus</option>
+                        <option value="September">🗓️ September</option>
+                        <option value="Oktober">🗓️ Oktober</option>
+                        <option value="November">🗓️ November</option>
+                        <option value="Desember">🗓️ Desember</option>
+                    </select>
+
+                    <select id="year-filter" onchange="updateDashboardData()" style="padding: 8px; border-radius: 5px; background: #2c3e50; color: white; border: 1px solid #34495e; cursor: pointer; outline: none;">
+                        <option value="">🌎 Semua Tahun (2021-2026)</option>
+                    </select>
+                </div>
+            </header>
+
+            <div id="overview-tab" class="tab-content active">
+                <!-- KOTAK KPI UTAMA (TOTAL) -->
+                <section class="kpi-section">
+                    <div class="kpi-card" style="border-bottom: 4px solid #3498db;">
+                        <h3>Total Keseluruhan</h3>
+                        <h2 id="kpi-total">Loading...</h2>
+                        <span class="badge">Ton</span>
+                    </div>
+                    <div class="kpi-card" style="border-bottom: 4px solid #f1c40f;">
+                        <h3>Total Robusta</h3>
+                        <h2 id="kpi-robusta">Loading...</h2>
+                        <span class="badge">Ton</span>
+                    </div>
+                    <div class="kpi-card" style="border-bottom: 4px solid #e67e22;">
+                        <h3>Total Arabika</h3>
+                        <h2 id="kpi-arabika">Loading...</h2>
+                        <span class="badge">Ton</span>
+                    </div>
+                </section>
+
+                <!-- KOTAK KPI BARU (TOP KABUPATEN) -->
+                <section class="kpi-section" style="margin-top: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="kpi-card" style="border-bottom: 4px solid #f1c40f; background: rgba(241, 196, 15, 0.05);">
+                        <h3 style="color: #f1c40f;">🏆 Kabupaten Produsen Robusta Terbanyak</h3>
+                        <h2 id="top-kab-robusta" style="font-size: 20px; margin-top: 10px;">Loading...</h2>
+                        <span class="badge" id="top-val-robusta" style="background: #f1c40f; color: #000; font-weight: bold;">0 Ton</span>
+                    </div>
+                    <div class="kpi-card" style="border-bottom: 4px solid #e67e22; background: rgba(230, 126, 34, 0.05);">
+                        <h3 style="color: #e67e22;">🏆 Kabupaten Produsen Arabika Terbanyak</h3>
+                        <h2 id="top-kab-arabika" style="font-size: 20px; margin-top: 10px;">Loading...</h2>
+                        <span class="badge" id="top-val-arabika" style="background: #e67e22; color: #fff; font-weight: bold;">0 Ton</span>
+                    </div>
+                </section>
+
+                <section class="chart-insight-wrapper" style="margin-top: 20px;">
+                    <div class="chart-card">
+                        <h3>🏆 Top 10 Provinsi Penghasil Kopi</h3>
+                        <div id="provinsiChart" style="width: 100%; height: 400px;"></div>
+                    </div>
+
+                    <div class="insight-card">
+                        <h3>💡 Analisis EduGrowth</h3>
+                        <div class="insight-content" id="dynamic-insight">
+                            <p style="color: #90a4ae;">Memuat analisis cerdas...</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div id="trend-tab" class="tab-content">
+                <section class="chart-section">
+                    <div class="chart-card">
+                        <h3>📈 Tren Produksi Kopi (Tahun ke Tahun)</h3>
+                        <div id="trendChart" style="width: 100%; height: 500px;"></div>
+                    </div>
+                </section>
+            </div>
+
+            <div id="table-tab" class="tab-content">
+                <section class="chart-section">
+                    <div class="chart-card">
+                        <h3>📄 Data Spreadsheet Mentah (Dataset Kopi Nasional)</h3>
+                        <div class="table-container">
+                            <table id="data-table">
+                                <thead>
+                                    <tr id="table-head"></tr>
+                                </thead>
+                                <tbody id="table-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
